@@ -18,58 +18,165 @@ exports.getAllReview = catchAsync(async (req, res, next) => {
     limit = 6,
   } = req.query;
 
-  // create a filter object
   const filter = {};
 
   if (companyName) {
-    filter.companyName = { $regex: companyName, $options: "i" };
+    filter.companyName = { $regex: companyName.trim(), $options: "i" };
   }
   if (vibe) {
-    filter.vibe = vibe;
+    filter.vibe = vibe.trim().toLowerCase();
   }
   if (search) {
-    filter.title = { $regex: search, $options: "i" };
+    filter.title = { $regex: search.trim(), $options: "i" };
   }
 
   const sortOptions = sort === "oldest" ? "createdAt" : "-createdAt";
-
   const skip = (page - 1) * limit;
 
-  const { reviews, total } = await Promise.all([
+  const [reviews, total] = await Promise.all([
     Story.find(filter).sort(sortOptions).skip(skip).limit(Number(limit)),
     Story.countDocuments(filter),
   ]);
+
   res.status(200).json({
-    status:"success",
-    results:reviews.length,
+    status: "success",
+    results: reviews.length,
     total,
-    page:Number(page),
-    totalPages:Math.ceil(total/limit),
-    data:{reviews},
+    page: Number(page),
+    totalPages: Math.ceil(total / limit),
+    data: { reviews },
+  });
+});
 
+exports.createStory = catchAsync(async (req, res, next) => {
+  let { vibe, companyName, isAnonymous, name, userType, title, story } = req.body;
 
-  })
+  if (!isAnonymous && (!name || !name.trim())) {
+    return next(new AppError("Name is required when you're not anonymous", 400));
+  }
+
+  const company = await Company.findOne({ name: companyName.trim() });
+  if (!company) {
+    return next(new AppError("Please select a valid company from the list", 400));
+  }
+
+  vibe = (vibe || "").trim().toLowerCase();
+  companyName = company.name.trim();
+
+  const newStory = await Story.create({
+    vibe,
+    companyName,
+    isAnonymous,
+    name: isAnonymous ? undefined : name.trim(),
+    anonymousId: isAnonymous ? generateAnonymousId() : undefined,
+    userType,
+    title,
+    story,
+  });
+
+  const update = {
+    $push: { reviews: newStory._id },
+    $inc: { totalReviews: 1 },
+  };
+
+  if (vibe === "positive") update.$inc.positiveCount = 1;
+  if (vibe === "negative") update.$inc.negativeCount = 1;
+  if (vibe === "neutral") update.$inc.neutralCount = 1;
+
+  await Company.findByIdAndUpdate(company._id, update);
+
+  res.status(201).json({
+    status: "success",
+    message: "Story Submitted Successfully",
+    data: { story: newStory },
+  });
 });
 
 
-exports.createStory = catchAsync(async (req,res,next) => {
-    const {vibe,companyName,isAnonymous,name,userType,title,story} = req.body;
-    if(!isAnonymous && name) {
-        return next(new AppError("name is required when Youre not Anonymous",400));
-    }
-    const company = await Company.findOne({
-        name:companyName.trim(),
 
-    });
-    if(!company) return next(new AppError("Please Select a valid company from the list",400))
+// exports.createStory = catchAsync(async (req,res,next) => {
+//     const {vibe,companyName,isAnonymous,name,userType,title,story} = req.body;
+//     if(!isAnonymous && name) {
+//         return next(new AppError("name is required when Youre not Anonymous",400));
+//     }
+//     const company = await Company.findOne({
+//         name:companyName.trim(),
 
-      const newStory = await Story.create({
-        vibe,companyName:company.name,isAnonymous,name:isAnonymous ? undefined :name,
-        anonymousId:isAnonymous?generateAnonymousId():undefined,
-        userType,
-        title,
-        story
-      });
+//     });
+//     if(!company) return next(new AppError("Please Select a valid company from the list",400))
 
+//       const newStory = await Story.create({
+//         vibe,companyName:company.name,isAnonymous,name:isAnonymous ? undefined :name,
+//         anonymousId:isAnonymous?generateAnonymousId():undefined,
+//         userType,
+//         title,
+//         story
+//       });
+
+
+//       const update = {
+//         $push:{reviews:newStory._id},
+//         $inc:{totalReviews:1},
+//       };
       
-})
+//       if (vibe==='postive') update.$inc.postiveCount = 1;
+//       if (vibe==='negative') update.$inc.negativeCount = 1;
+//       if (vibe==='neutral') update.$inc.neutralCount = 1;
+
+//       await Company.findByIdAndUpdate(company._id, update);
+
+//       res.status(201).json({
+//         status: "success",
+//         message: "Story Submitted Successfully",
+//         data: {
+//           story: newStory,
+//         },
+//       });
+      
+// })
+
+// exports.createStory = catchAsync(async (req, res, next) => {
+//     const { vibe, companyName, isAnonymous, name, userType, title, story } = req.body;
+
+//     // ✅ Corrected validation
+//     if (!isAnonymous && (!name || !name.trim())) {
+//         return next(new AppError("Name is required when you're not anonymous", 400));
+//     }
+
+//     const company = await Company.findOne({
+//         name: companyName.trim(),
+//     });
+
+//     if (!company) {
+//         return next(new AppError("Please select a valid company from the list", 400));
+//     }
+
+//     const newStory = await Story.create({
+//         vibe,
+//         companyName: company.name,
+//         isAnonymous,
+//         name: isAnonymous ? undefined : name.trim(),
+//         anonymousId: isAnonymous ? generateAnonymousId() : undefined,
+//         userType,
+//         title,
+//         story
+//     });
+
+//     const update = {
+//         $push: { reviews: newStory._id },
+//         $inc: { totalReviews: 1 },
+//     };
+
+//     if (vibe === 'positive') update.$inc.positiveCount = 1;
+//     if (vibe === 'negative') update.$inc.negativeCount = 1;
+//     if (vibe === 'neutral') update.$inc.neutralCount = 1;
+
+//     await Company.findByIdAndUpdate(company._id, update);
+
+//     res.status(201).json({
+//         status: "success",
+//         message: "Story Submitted Successfully",
+//         data: { story: newStory },
+//     });
+// });
+

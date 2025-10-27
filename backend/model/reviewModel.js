@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const storySchema = new mongoose.Schema({
   vibe: {
     type: String,
-    enum: ["postive", "negative", "neutral"],
+    enum: ["positive", "negative", "neutral"],
     required: true,
   },
   companyName: {

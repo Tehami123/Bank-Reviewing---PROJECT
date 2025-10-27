@@ -1,12 +1,13 @@
+// routes/companyRoute.js
 const express = require("express");
-const companyController = require("../controllers/companyController");
-const errorController = require("../controllers/errorController");
+const { getAllCompanies, getCompaniesAllStats, getCompanyById } = require("../controllers/companyController");
+const { getAllCompaniesTotalStats } = require("../controllers/companyStatsController");
 
 const router = express.Router();
 
-router.get('/all', companyController.getAllCompanies);
-router.get("/total-stats", errorController.getAllCompaniesTotalStats);
-router.get("/stats", companyController.getCompaniesAllStats);
-router.get("/:id", companyController.getCompanyById);
+router.get("/all", getAllCompanies);
+router.get("/total-stats", getAllCompaniesTotalStats);
+router.get("/stats", getCompaniesAllStats);
+router.get("/:id", getCompanyById);
 
 module.exports = router;

@@ -1,10 +1,11 @@
 
 const express = require("express")
-const { getAllReview } = require("../controllers/reviewController")
+const { getAllReview, createStory } = require("../controllers/reviewController")
 
 const router = express.Router()
 
 router.get('/all',getAllReview);
+router.post('/create',createStory);
 
 
 module.exports = router;

@@ -2,6 +2,7 @@
 const catchAsync = require("../utils/catchAsync");
 
 
+// controllers/errorController.js
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
@@ -13,6 +14,7 @@ module.exports = (err, req, res, next) => {
     stack: err.stack,
   });
 };
+
 
 
 exports.getAllCompaniesTotalStats = catchAsync(async (req,res,next) => {
