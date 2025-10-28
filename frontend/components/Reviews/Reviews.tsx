@@ -60,7 +60,7 @@ const Reviews = () => {
           <p className="text-gray-600">Customer Feedback and Experince</p>
         </div>
         {/* filter section */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+        <div className="bg-white dark:bg-black dark:text-white rounded-lg shadow-sm border p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
             {/* search company */}
             <div className="md:col-span-4">
@@ -84,7 +84,7 @@ const Reviews = () => {
                 Vibe
               </label>
               <select
-                className="w-full px-3 py-2 border rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 bg-white"
+                className="w-full px-3 py-2 border dark:bg-black dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 bg-white"
                 value={vibe}
                 onChange={(e) => {
                   setVibe(e.target.value);

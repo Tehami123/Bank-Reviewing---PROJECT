@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { Button } from "../ui/button";
+import { ThemeToggle } from "../ui/theme-toggle";
 
 type Props = {
   openNav: () => void;
@@ -15,7 +16,7 @@ const Nav = ({ openNav }: Props) => {
   const pathname = usePathname();
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="w-[90%] mx-auto">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -49,11 +50,13 @@ const Nav = ({ openNav }: Props) => {
           <div className="flex items-center space-x-2 lg:space-x-4">
             <Link
               href="/want-to-know"
-              className="lg:flex hidden items-center space-x-2 px-3 py-2 text-gray-700 hover:text-blue-600 w-full text-left"
+              className="lg:flex hidden items-center space-x-2 px-3 py-2 text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400 w-full text-left"
             >
               <HelpCircle className="h-3 w-3 lg:h-4 lg:w-4" />
               <span className="text-xs lg:text-sm font-medium whitespace-nowrap">Want To Know</span>
             </Link>
+
+            <ThemeToggle />
 
             <Button size="lg" className="cursor-pointer">
               Sign Up

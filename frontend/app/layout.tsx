@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import NavWrapper from "@/components/Navbar/NavWrapper";
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 
 
@@ -24,15 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${font.className} antialiased`}
-      >
-        <NavWrapper/>
-        {children}
-        <Toaster position="top-center"/>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${font.className} antialiased`}>
+        <ThemeProvider>
+          <NavWrapper/>
+          {children}
+          <Toaster position="top-center"/>
+        </ThemeProvider>
       </body>
     </html>
-
   );
 }

@@ -27,7 +27,7 @@ return "text-green-600 bg-green-100";
           return (
             <div
               key={company._id}
-              className="bg-white rounded-xl shadow-md hover:scale-105 border border-gray-200 hover:shadow-blue-500 hover:border-4 hover:border-blue-600 p-6 hover:shadow-lg transition-all duration-300 hover:rounded-2xl group"
+              className="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:scale-105 border border-gray-200 dark:border-gray-700 hover:shadow-blue-500 dark:hover:shadow-blue-500/30 hover:border-4 hover:border-blue-600 dark:hover:border-blue-500 p-6 hover:shadow-lg transition-all duration-300 hover:rounded-2xl group"
             >
               Bank Batch
               <div className="flex items-start justify-between mb-4 ">
@@ -39,14 +39,14 @@ return "text-green-600 bg-green-100";
               </div>
               {/* company name */}
               <div className="mb-4">
-                <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {company.name}
                 </h3>
               </div>
               {/* metrics grid
                */}
               <div className="grid grid-cols-2 mb-4">
-                <div className="bg-gray-50 rounded-lg p-3">
+                <div className="bg-muted rounded-lg p-3 dark:bg-secondary">
                   <div className="flex items-center space-x-2 mb-1">
                     <Users className="w-4 h-4 text-blue-500" />
                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">

@@ -14,23 +14,23 @@ const ReviewCard = ({ review }: Props) => {
   const getvibeColor = (vibe: string) => {
     switch (vibe) {
       case "positive":
-        return "text-green-700 bg-green-100 border border-green-200";
+        return "text-green-700 bg-green-100 border border-green-200 dark:text-green-400 dark:bg-green-900/50 dark:border-green-700";
       case "negative":
-        return "text-red-700 bg-red-100 border border-red-200";
+        return "text-red-700 bg-red-100 border border-red-200 dark:text-red-400 dark:bg-red-900/50 dark:border-red-700";
       case "neutral":
-        return "text-yellow-700 bg-yellow-100 border border-yellow-200";
+        return "text-yellow-700 bg-yellow-100 border border-yellow-200 dark:text-yellow-400 dark:bg-yellow-900/50 dark:border-yellow-700";
     }
   };
 
   const displayContent = shouldShowSeeMore && !isExpanded ? review.story.substring(0,maxLength) + "...": review.story;
 
   return (
-    <div className="bg-white rounded-xl hover:ring-4 hover:ring-blue-400 shadow-sm border border-gray-200 p-6 hover:shadow-lg hover:shadow-blue-500 transition-all duration-300 hover:border-blue-200">
+    <div className="bg-white dark:bg-gray-800 rounded-xl hover:ring-4 hover:ring-blue-400/30 shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 hover:border-blue-200 dark:hover:border-blue-500/30">
       {/* header */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 space-y-3 sm:space-y-0">
         <div className="flex-1">
           <div className="flex flex-wrap items-center space-x-3 mb-3">
-            <h3 className="sm:text-xl text-lg font-bold text-gray-900">
+            <h3 className="sm:text-xl text-lg font-bold text-gray-900 dark:text-white">
               {review.companyName}
             </h3>
             <span
@@ -45,12 +45,12 @@ const ReviewCard = ({ review }: Props) => {
       </div>
 
       {/* review Title */}
-      <h4 className="sm:text-lg text-base font-semibold text-gray-800 mb-4 leading-relaxed">
+      <h4 className="sm:text-lg text-base font-semibold text-gray-800 dark:text-gray-100 mb-4 leading-relaxed">
         {review.title}
       </h4>
       {/* review content */}
       <div className="mb-6">
-        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+        <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base leading-relaxed">
           {displayContent}
         </p>
 
